@@ -9,6 +9,8 @@ class News extends Model
     protected $fillable = [
         'title',
         'content',
+        'price',
+        'image',
     ];
 
     public function comments()

@@ -1,35 +1,30 @@
 @extends('layouts.myapp')
 
 @section('content')
-<div class="container">
-    <h1>{{ $news->title }}</h1>
 
-    <p>{!! nl2br(e($news->content)) !!}</p>
+<div class="max-w-4xl mx-auto bg-white p-6 rounded-xl shadow">
 
-    {{-- Flash message --}}
-    @if(session('success'))
-        <div class="alert alert-success">
-            {{ session('success') }}
-        </div>
+    <h1 class="text-3xl font-bold mb-4">
+        {{ $news->title }}
+    </h1>
+
+    {{-- ẢNH SẢN PHẨM --}}
+    @if($news->image)
+        <img
+            src="{{ asset('storage/' . $news->image) }}"
+            alt="{{ $news->title }}"
+            class="w-full h-80 object-contain rounded-lg mb-6"
+        >
     @endif
 
-    {{-- Comment form --}}
-    <div class="card mb-4">
-        <div class="card-body">
-            @auth
-                @include('comments._form', ['news' => $news])
-            @else
-                <p>Vui lòng <a href="{{ route('login') }}">đăng nhập</a> để gửi bình luận.</p>
-            @endauth
-        </div>
-    </div>
+    <p class="text-gray-700 mb-4">
+        {!! nl2br(e($news->content)) !!}
+    </p>
 
-    {{-- Comments list --}}
-    @include('comments._list', ['comments' => $comments])
+    <p class="text-red-600 text-2xl font-bold mb-6">
+        {{ number_format($news->price) }} đ
+    </p>
 
-    {{-- Pagination --}}
-    <div class="d-flex justify-content-center mt-3">
-        {{ $comments->links('pagination::bootstrap-5') }}
-    </div>
 </div>
+
 @endsection

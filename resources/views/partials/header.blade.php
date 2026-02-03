@@ -1,38 +1,83 @@
-<header style="background: #f5f5f5; padding: 10px;">
-    <h1>Laravel News</h1>
+<header class="bg-white shadow">
+    <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+        {{-- LOGO --}}
+        <a href="{{ route('home') }}" class="text-xl font-bold text-indigo-600">
+            PC ACCESSORY SHOP
+        </a>
 
-    <section class="row">
-        <nav class="col-9">
-            <a href="{{ route('home') }}">Trang chủ</a> |
-            <a href="{{ route('news.index') }}">Tin tức</a> |
-            <a href="/about">Giới thiệu</a>
+        {{-- MENU --}}
+        <nav class="flex gap-6 items-center">
+            <a href="{{ route('home') }}" class="hover:text-indigo-600">
+                Trang chủ
+            </a>
+
+            <a href="{{ route('news.index') }}" class="hover:text-indigo-600">
+                Sản phẩm
+            </a>
+
+            <a href="{{ route('cart.index') }}" class="hover:text-indigo-600">
+                Giỏ hàng
+            </a>
+
+            {{-- USER: xem đơn --}}
+            @auth
+                <a href="{{ route('orders.my') }}" class="hover:text-indigo-600">
+                    Đơn hàng của tôi
+                </a>
+            @endauth
+
+            {{-- ADMIN --}}
+            @auth
+                @if(auth()->user()->role === 'admin')
+                    <a href="{{ route('admin.orders.index') }}"
+                       class="text-red-600 font-semibold hover:underline">
+                        Quản lý đơn
+                    </a>
+                @endif
+            @endauth
         </nav>
 
-        <div class="col-3 row">
-            @if (Route::has('login'))
+        {{-- SEARCH --}}
+<form action="{{ route('news.search') }}" method="GET" class="flex items-center gap-2">
+    <input
+        type="text"
+        name="q"
+        value="{{ request('q') }}"
+        placeholder="Tìm sản phẩm..."
+        class="border rounded-lg px-3 py-1 text-sm focus:outline-none focus:ring focus:ring-indigo-300"
+    >
+    <button
+        type="submit"
+        class="bg-indigo-600 text-white px-3 py-1 rounded-lg text-sm hover:bg-indigo-700">
+        🔍
+    </button>
+</form>
 
-                @auth
-                    <a class="col-3" href="{{ route('profile.edit') }}">
-                        {{ Auth::user()->name }}
-                    </a>
 
-                    <form class="col-9" method="POST" action="{{ route('logout') }}">
-                        @csrf
-                        <x-dropdown-link
-                            :href="route('logout')"
-                            onclick="event.preventDefault(); this.closest('form').submit();">
-                            {{ __('Log Out') }}
-                        </x-dropdown-link>
-                    </form>
-                @else
-                    <a href="{{ route('login') }}" class="col-6">Log in</a>
+        {{-- AUTH --}}
+        <div class="flex gap-4 items-center">
+            @auth
+                <span class="text-sm text-gray-600">
+                    👋 {{ auth()->user()->name }}
+                </span>
 
-                    @if (Route::has('register'))
-                        <a href="{{ route('register') }}" class="col-6">Register</a>
-                    @endif
-                @endauth
+                <form action="{{ route('logout') }}" method="POST">
+                    @csrf
+                    <button class="text-red-500 text-sm hover:underline">
+                        Đăng xuất
+                    </button>
+                </form>
+            @else
+                <a href="{{ route('login') }}"
+                   class="text-indigo-600 text-sm hover:underline">
+                    Đăng nhập
+                </a>
 
-            @endif
+                <a href="{{ route('register') }}"
+                   class="text-green-600 text-sm hover:underline">
+                    Đăng ký
+                </a>
+            @endauth
         </div>
-    </section>
+    </div>
 </header>
